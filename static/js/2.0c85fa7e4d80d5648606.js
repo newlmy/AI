@@ -1,83 +1,49 @@
-webpackJsonp([1],{
+webpackJsonp([2],{
 
 /***/ 100:
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-exports.__esModule = true;
-
-var _defineProperty = __webpack_require__(107);
-
-var _defineProperty2 = _interopRequireDefault(_defineProperty);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      (0, _defineProperty2.default)(target, descriptor.key, descriptor);
-    }
-  }
-
-  return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) defineProperties(Constructor, staticProps);
-    return Constructor;
-  };
-}();
+module.exports = !__webpack_require__(79) && !__webpack_require__(88)(function(){
+  return Object.defineProperty(__webpack_require__(95)('div'), 'a', {get: function(){ return 7; }}).a != 7;
+});
 
 /***/ }),
 
 /***/ 101:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = !__webpack_require__(79) && !__webpack_require__(87)(function(){
-  return Object.defineProperty(__webpack_require__(95)('div'), 'a', {get: function(){ return 7; }}).a != 7;
-});
+module.exports = { "default": __webpack_require__(102), __esModule: true };
 
 /***/ }),
 
-/***/ 107:
+/***/ 102:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = { "default": __webpack_require__(108), __esModule: true };
-
-/***/ }),
-
-/***/ 108:
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(117);
-var $Object = __webpack_require__(82).Object;
+__webpack_require__(105);
+var $Object = __webpack_require__(81).Object;
 module.exports = function defineProperty(it, key, desc){
   return $Object.defineProperty(it, key, desc);
 };
 
 /***/ }),
 
-/***/ 117:
+/***/ 105:
 /***/ (function(module, exports, __webpack_require__) {
 
-var $export = __webpack_require__(91);
+var $export = __webpack_require__(90);
 // 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
-$export($export.S + $export.F * !__webpack_require__(79), 'Object', {defineProperty: __webpack_require__(83).f});
+$export($export.S + $export.F * !__webpack_require__(79), 'Object', {defineProperty: __webpack_require__(82).f});
 
 /***/ }),
 
-/***/ 155:
+/***/ 111:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return formatTime; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__ = __webpack_require__(99);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__ = __webpack_require__(92);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass__ = __webpack_require__(100);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass__ = __webpack_require__(93);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass__);
 
 
@@ -136,16 +102,23 @@ function formatTime(date) {
 
 /***/ }),
 
-/***/ 156:
+/***/ 122:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "static/img/star-bg.ba93415.svg";
+
+/***/ }),
+
+/***/ 161:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__ = __webpack_require__(99);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__ = __webpack_require__(92);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass__ = __webpack_require__(100);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass__ = __webpack_require__(93);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_utils_util__ = __webpack_require__(155);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_utils_util__ = __webpack_require__(111);
 
 
 
@@ -155,10 +128,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var Polygon = function () {
   function Polygon(_ref) {
     var ctx = _ref.ctx,
+        _ref$lineWidth = _ref.lineWidth,
+        lineWidth = _ref$lineWidth === undefined ? 2 : _ref$lineWidth,
         _ref$strokeStyle = _ref.strokeStyle,
-        strokeStyle = _ref$strokeStyle === undefined ? 'blue' : _ref$strokeStyle,
+        strokeStyle = _ref$strokeStyle === undefined ? 'rgba(255, 113, 98, 1)' : _ref$strokeStyle,
         _ref$fillStyle = _ref.fillStyle,
-        fillStyle = _ref$fillStyle === undefined ? 'rgba(255, 113, 98, .8)' : _ref$fillStyle,
+        fillStyle = _ref$fillStyle === undefined ? 'rgba(79, 205, 66, .5)' : _ref$fillStyle,
         _ref$dotRadius = _ref.dotRadius,
         dotRadius = _ref$dotRadius === undefined ? 3 : _ref$dotRadius;
 
@@ -167,9 +142,9 @@ var Polygon = function () {
     this.ctx = ctx;
     this.dotRadius = dotRadius;
     this.strokeStyle = strokeStyle;
+    this.lineWidth = lineWidth;
     this.fillStyle = fillStyle;
     this.dots = [];
-    this.finish = false;
     this.startX = '';
     this.startY = '';
     this.lastX = '';
@@ -188,6 +163,7 @@ var Polygon = function () {
       this.lastY = y;
       this.ctx.beginPath();
       this.ctx.fillStyle = this.strokeStyle;
+      this.ctx.lineWidth = 1;
       this.ctx.arc(x, y, this.dotRadius, 0, Math.PI * 2);
       this.ctx.fill();
     }
@@ -199,6 +175,7 @@ var Polygon = function () {
 
       this.ctx.beginPath();
       this.ctx.strokeStyle = this.strokeStyle;
+      this.ctx.lineWidth = this.lineWidth;
       this.ctx.moveTo(this.lastX, this.lastY);
       this.ctx.lineTo(x, y);
       this.ctx.stroke();
@@ -213,6 +190,7 @@ var Polygon = function () {
 
       this.ctx.fillStyle = this.fillStyle;
       this.ctx.strokeStyle = 'transparent';
+      this.ctx.lineWidth = 1;
       this.ctx.beginPath();
       this.ctx.moveTo(this.startX, this.startY);
       this.dots.forEach(function (dot, index) {
@@ -230,6 +208,7 @@ var Polygon = function () {
       this.startDraw({ x: this.startX, y: this.startY });
       this.ctx.beginPath();
       this.ctx.strokeStyle = this.strokeStyle;
+      this.ctx.lineWidth = this.lineWidth;
       this.ctx.moveTo(this.startX, this.startY);
       this.dots.forEach(function (dot, index) {
         _this3.ctx.lineTo(dot.x, dot.y);
@@ -458,7 +437,7 @@ var Polygon = function () {
 
 /***/ }),
 
-/***/ 201:
+/***/ 204:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(73)(true);
@@ -466,20 +445,20 @@ exports = module.exports = __webpack_require__(73)(true);
 
 
 // module
-exports.push([module.i, ".header[data-v-2297f758]{height:50px;line-height:50px;padding:0 20px}.main-container[data-v-2297f758]{width:100%;height:calc(100% - 50px)}.tools[data-v-2297f758]{padding:0 10px;height:100%}.tool-item[data-v-2297f758]{height:40px}.canvas-c[data-v-2297f758]{height:100%;position:relative}.bg-img-num1[data-v-2297f758]{position:absolute;left:0;right:0;top:0;bottom:0;color:hsla(0,0%,100%,.65);background-color:#24292e;background-image:url(" + __webpack_require__(208) + "),linear-gradient(#191c20,#24292e 15%);background-repeat:repeat-x;background-position:center 0,0 0,0 0}.canvas-container[data-v-2297f758]{position:absolute;left:0;right:0;top:0;bottom:0;margin:auto;overflow:hidden;background-image:url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC\")}.canvas-actual-layer[data-v-2297f758]{position:relative}.canvas[data-v-2297f758]{position:absolute;top:0;left:0}.cursor-move[data-v-2297f758]{cursor:move}.img-draw[data-v-2297f758]{cursor:crosshair}#ui-layer[data-v-2297f758]{z-index:3}", "", {"version":3,"sources":["/Applications/XAMPP/xamppfiles/htdocs/XaircraftProject/web/AI/src/views/polygon/index.vue"],"names":[],"mappings":"AACA,yBACE,YAAa,AACb,iBAAkB,AAClB,cAAgB,CACjB,AACD,iCACE,WAAY,AACZ,wBAA0B,CAC3B,AACD,wBACE,eAAgB,AAChB,WAAa,CACd,AACD,4BACE,WAAa,CACd,AACD,2BACE,YAAa,AACb,iBAAmB,CACpB,AACD,8BACE,kBAAmB,AACnB,OAAQ,AACR,QAAS,AACT,MAAO,AACP,SAAU,AACV,0BAA8B,AAC9B,yBAA0B,AAC1B,oFAA6F,AAC7F,2BAA4B,AAC5B,oCAAwC,CACzC,AACD,mCACE,kBAAmB,AACnB,OAAQ,AACR,QAAS,AACT,MAAO,AACP,SAAU,AACV,YAAa,AACb,gBAAiB,AACjB,8QAAgR,CACjR,AACD,sCACE,iBAAmB,CACpB,AACD,yBACE,kBAAmB,AACnB,MAAO,AACP,MAAQ,CACT,AACD,8BACE,WAAa,CACd,AACD,2BACE,gBAAkB,CACnB,AACD,2BACE,SAAW,CACZ","file":"index.vue","sourcesContent":["\n.header[data-v-2297f758] {\n  height: 50px;\n  line-height: 50px;\n  padding: 0 20px;\n}\n.main-container[data-v-2297f758] {\n  width: 100%;\n  height: calc(100% - 50px);\n}\n.tools[data-v-2297f758] {\n  padding: 0 10px;\n  height: 100%;\n}\n.tool-item[data-v-2297f758] {\n  height: 40px;\n}\n.canvas-c[data-v-2297f758] {\n  height: 100%;\n  position: relative;\n}\n.bg-img-num1[data-v-2297f758] {\n  position: absolute;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 0;\n  color: rgba(255,255,255,0.65);\n  background-color: #24292e;\n  background-image: url(../../assets/images/star-bg.svg),linear-gradient(#191c20, #24292e 15%);\n  background-repeat: repeat-x;\n  background-position: center 0, 0 0, 0 0;\n}\n.canvas-container[data-v-2297f758] {\n  position: absolute;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 0;\n  margin: auto;\n  overflow: hidden;\n  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC');\n}\n.canvas-actual-layer[data-v-2297f758] {\n  position: relative;\n}\n.canvas[data-v-2297f758] {\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n.cursor-move[data-v-2297f758] {\n  cursor: move;\n}\n.img-draw[data-v-2297f758] {\n  cursor: crosshair;\n}\n#ui-layer[data-v-2297f758] {\n  z-index: 3;\n}\n"],"sourceRoot":""}]);
+exports.push([module.i, ".header[data-v-2297f758]{height:50px;line-height:50px;padding:0 20px}.main-container[data-v-2297f758]{width:100%;height:calc(100% - 50px)}.tools[data-v-2297f758]{padding:0 10px;height:100%}.tool-item[data-v-2297f758]{height:40px}.canvas-c[data-v-2297f758]{height:100%;position:relative}.bg-img-num1[data-v-2297f758]{position:absolute;left:0;right:0;top:0;bottom:0;color:hsla(0,0%,100%,.65);background-color:#24292e;background-image:url(" + __webpack_require__(122) + "),linear-gradient(#191c20,#24292e 15%);background-repeat:repeat-x;background-position:center 0,0 0,0 0}.canvas-container[data-v-2297f758]{position:absolute;left:0;right:0;top:0;bottom:0;margin:auto;overflow:hidden;background-image:url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC\")}.canvas-actual-layer[data-v-2297f758]{position:relative}.canvas[data-v-2297f758]{position:absolute;top:0;left:0}.cursor-move[data-v-2297f758]{cursor:move}.img-draw[data-v-2297f758]{cursor:crosshair}#ui-layer[data-v-2297f758]{z-index:3}", "", {"version":3,"sources":["/Applications/XAMPP/xamppfiles/htdocs/XaircraftProject/web/AI/src/views/polygon/index.vue"],"names":[],"mappings":"AACA,yBACE,YAAa,AACb,iBAAkB,AAClB,cAAgB,CACjB,AACD,iCACE,WAAY,AACZ,wBAA0B,CAC3B,AACD,wBACE,eAAgB,AAChB,WAAa,CACd,AACD,4BACE,WAAa,CACd,AACD,2BACE,YAAa,AACb,iBAAmB,CACpB,AACD,8BACE,kBAAmB,AACnB,OAAQ,AACR,QAAS,AACT,MAAO,AACP,SAAU,AACV,0BAA8B,AAC9B,yBAA0B,AAC1B,oFAA6F,AAC7F,2BAA4B,AAC5B,oCAAwC,CACzC,AACD,mCACE,kBAAmB,AACnB,OAAQ,AACR,QAAS,AACT,MAAO,AACP,SAAU,AACV,YAAa,AACb,gBAAiB,AACjB,8QAAgR,CACjR,AACD,sCACE,iBAAmB,CACpB,AACD,yBACE,kBAAmB,AACnB,MAAO,AACP,MAAQ,CACT,AACD,8BACE,WAAa,CACd,AACD,2BACE,gBAAkB,CACnB,AACD,2BACE,SAAW,CACZ","file":"index.vue","sourcesContent":["\n.header[data-v-2297f758] {\n  height: 50px;\n  line-height: 50px;\n  padding: 0 20px;\n}\n.main-container[data-v-2297f758] {\n  width: 100%;\n  height: calc(100% - 50px);\n}\n.tools[data-v-2297f758] {\n  padding: 0 10px;\n  height: 100%;\n}\n.tool-item[data-v-2297f758] {\n  height: 40px;\n}\n.canvas-c[data-v-2297f758] {\n  height: 100%;\n  position: relative;\n}\n.bg-img-num1[data-v-2297f758] {\n  position: absolute;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 0;\n  color: rgba(255,255,255,0.65);\n  background-color: #24292e;\n  background-image: url(../../assets/images/star-bg.svg),linear-gradient(#191c20, #24292e 15%);\n  background-repeat: repeat-x;\n  background-position: center 0, 0 0, 0 0;\n}\n.canvas-container[data-v-2297f758] {\n  position: absolute;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 0;\n  margin: auto;\n  overflow: hidden;\n  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC');\n}\n.canvas-actual-layer[data-v-2297f758] {\n  position: relative;\n}\n.canvas[data-v-2297f758] {\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n.cursor-move[data-v-2297f758] {\n  cursor: move;\n}\n.img-draw[data-v-2297f758] {\n  cursor: crosshair;\n}\n#ui-layer[data-v-2297f758] {\n  z-index: 3;\n}\n"],"sourceRoot":""}]);
 
 // exports
 
 
 /***/ }),
 
-/***/ 204:
+/***/ 208:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(201);
+var content = __webpack_require__(204);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -487,14 +466,7 @@ var update = __webpack_require__(74)("30cd88d0", content, true);
 
 /***/ }),
 
-/***/ 208:
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "static/img/star-bg.ba93415.svg";
-
-/***/ }),
-
-/***/ 210:
+/***/ 214:
 /***/ (function(module, exports) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -632,17 +604,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 /***/ }),
 
-/***/ 75:
+/***/ 76:
 /***/ (function(module, exports, __webpack_require__) {
 
 function injectStyle (ssrContext) {
-  __webpack_require__(204)
+  __webpack_require__(208)
 }
-var Component = __webpack_require__(98)(
+var Component = __webpack_require__(99)(
   /* script */
-  __webpack_require__(156),
+  __webpack_require__(161),
   /* template */
-  __webpack_require__(210),
+  __webpack_require__(214),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -656,7 +628,17 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ 78:
+/***/ 79:
+/***/ (function(module, exports, __webpack_require__) {
+
+// Thank's IE8 for his funny defineProperty
+module.exports = !__webpack_require__(88)(function(){
+  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
+});
+
+/***/ }),
+
+/***/ 80:
 /***/ (function(module, exports) {
 
 // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
@@ -666,17 +648,7 @@ if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
 
 /***/ }),
 
-/***/ 79:
-/***/ (function(module, exports, __webpack_require__) {
-
-// Thank's IE8 for his funny defineProperty
-module.exports = !__webpack_require__(87)(function(){
-  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
-});
-
-/***/ }),
-
-/***/ 82:
+/***/ 81:
 /***/ (function(module, exports) {
 
 var core = module.exports = {version: '2.4.0'};
@@ -684,12 +656,12 @@ if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
 
 /***/ }),
 
-/***/ 83:
+/***/ 82:
 /***/ (function(module, exports, __webpack_require__) {
 
-var anObject       = __webpack_require__(84)
-  , IE8_DOM_DEFINE = __webpack_require__(101)
-  , toPrimitive    = __webpack_require__(97)
+var anObject       = __webpack_require__(86)
+  , IE8_DOM_DEFINE = __webpack_require__(100)
+  , toPrimitive    = __webpack_require__(98)
   , dP             = Object.defineProperty;
 
 exports.f = __webpack_require__(79) ? Object.defineProperty : function defineProperty(O, P, Attributes){
@@ -706,10 +678,19 @@ exports.f = __webpack_require__(79) ? Object.defineProperty : function definePro
 
 /***/ }),
 
-/***/ 84:
+/***/ 83:
+/***/ (function(module, exports) {
+
+module.exports = function(it){
+  return typeof it === 'object' ? it !== null : typeof it === 'function';
+};
+
+/***/ }),
+
+/***/ 86:
 /***/ (function(module, exports, __webpack_require__) {
 
-var isObject = __webpack_require__(86);
+var isObject = __webpack_require__(83);
 module.exports = function(it){
   if(!isObject(it))throw TypeError(it + ' is not an object!');
   return it;
@@ -717,11 +698,11 @@ module.exports = function(it){
 
 /***/ }),
 
-/***/ 85:
+/***/ 87:
 /***/ (function(module, exports, __webpack_require__) {
 
-var dP         = __webpack_require__(83)
-  , createDesc = __webpack_require__(92);
+var dP         = __webpack_require__(82)
+  , createDesc = __webpack_require__(91);
 module.exports = __webpack_require__(79) ? function(object, key, value){
   return dP.f(object, key, createDesc(1, value));
 } : function(object, key, value){
@@ -731,16 +712,7 @@ module.exports = __webpack_require__(79) ? function(object, key, value){
 
 /***/ }),
 
-/***/ 86:
-/***/ (function(module, exports) {
-
-module.exports = function(it){
-  return typeof it === 'object' ? it !== null : typeof it === 'function';
-};
-
-/***/ }),
-
-/***/ 87:
+/***/ 88:
 /***/ (function(module, exports) {
 
 module.exports = function(exec){
@@ -753,11 +725,11 @@ module.exports = function(exec){
 
 /***/ }),
 
-/***/ 90:
+/***/ 89:
 /***/ (function(module, exports, __webpack_require__) {
 
 // optional / simple context binding
-var aFunction = __webpack_require__(93);
+var aFunction = __webpack_require__(94);
 module.exports = function(fn, that, length){
   aFunction(fn);
   if(that === undefined)return fn;
@@ -779,13 +751,13 @@ module.exports = function(fn, that, length){
 
 /***/ }),
 
-/***/ 91:
+/***/ 90:
 /***/ (function(module, exports, __webpack_require__) {
 
-var global    = __webpack_require__(78)
-  , core      = __webpack_require__(82)
-  , ctx       = __webpack_require__(90)
-  , hide      = __webpack_require__(85)
+var global    = __webpack_require__(80)
+  , core      = __webpack_require__(81)
+  , ctx       = __webpack_require__(89)
+  , hide      = __webpack_require__(87)
   , PROTOTYPE = 'prototype';
 
 var $export = function(type, name, source){
@@ -846,7 +818,7 @@ module.exports = $export;
 
 /***/ }),
 
-/***/ 92:
+/***/ 91:
 /***/ (function(module, exports) {
 
 module.exports = function(bitmap, value){
@@ -860,7 +832,57 @@ module.exports = function(bitmap, value){
 
 /***/ }),
 
+/***/ 92:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+exports.default = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+
+/***/ }),
+
 /***/ 93:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _defineProperty = __webpack_require__(101);
+
+var _defineProperty2 = _interopRequireDefault(_defineProperty);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      (0, _defineProperty2.default)(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+/***/ }),
+
+/***/ 94:
 /***/ (function(module, exports) {
 
 module.exports = function(it){
@@ -873,8 +895,8 @@ module.exports = function(it){
 /***/ 95:
 /***/ (function(module, exports, __webpack_require__) {
 
-var isObject = __webpack_require__(86)
-  , document = __webpack_require__(78).document
+var isObject = __webpack_require__(83)
+  , document = __webpack_require__(80).document
   // in old IE typeof document.createElement is 'object'
   , is = isObject(document) && isObject(document.createElement);
 module.exports = function(it){
@@ -883,11 +905,11 @@ module.exports = function(it){
 
 /***/ }),
 
-/***/ 97:
+/***/ 98:
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.1.1 ToPrimitive(input [, PreferredType])
-var isObject = __webpack_require__(86);
+var isObject = __webpack_require__(83);
 // instead of the ES6 spec version, we didn't implement @@toPrimitive case
 // and the second argument - flag - preferred type is a string
 module.exports = function(it, S){
@@ -901,7 +923,7 @@ module.exports = function(it, S){
 
 /***/ }),
 
-/***/ 98:
+/***/ 99:
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -997,23 +1019,7 @@ module.exports = function normalizeComponent (
 }
 
 
-/***/ }),
-
-/***/ 99:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-exports.default = function (instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-};
-
 /***/ })
 
 });
-//# sourceMappingURL=1.1a1512756e0670c60b48.js.map
+//# sourceMappingURL=2.0c85fa7e4d80d5648606.js.map

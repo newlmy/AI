@@ -106,15 +106,15 @@ var RouterConfig = [{
   meta: {
     title: '区块'
   },
-  children: [{
-    path: '/test',
-    component: function component(resolve) {
-      return __webpack_require__.e/* require */(0).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(77)]; (resolve.apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}.bind(this)).catch(__webpack_require__.oe);
-    },
-    meta: {
-      title: '大脑入口'
-    }
-  }]
+  children: []
+}, {
+  path: '/test',
+  component: function component(resolve) {
+    return __webpack_require__.e/* require */(0).then(function() { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(77)]; (resolve.apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));}.bind(this)).catch(__webpack_require__.oe);
+  },
+  meta: {
+    title: '大脑入口'
+  }
 }, {
   path: '/polygon/paper',
   component: function component(resolve) {
@@ -129,4 +129,4 @@ var RouterConfig = [{
 /***/ })
 
 },[50]);
-//# sourceMappingURL=app.b95f6fd89b481f6c8774.js.map
+//# sourceMappingURL=app.6230b76b5d28dd057b8d.js.map

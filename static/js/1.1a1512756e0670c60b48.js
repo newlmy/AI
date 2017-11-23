@@ -156,11 +156,11 @@ var Polygon = function () {
   function Polygon(_ref) {
     var ctx = _ref.ctx,
         _ref$strokeStyle = _ref.strokeStyle,
-        strokeStyle = _ref$strokeStyle === undefined ? 'red' : _ref$strokeStyle,
+        strokeStyle = _ref$strokeStyle === undefined ? 'blue' : _ref$strokeStyle,
         _ref$fillStyle = _ref.fillStyle,
-        fillStyle = _ref$fillStyle === undefined ? 'rgba(135, 210, 3, .8)' : _ref$fillStyle,
+        fillStyle = _ref$fillStyle === undefined ? 'rgba(255, 113, 98, .8)' : _ref$fillStyle,
         _ref$dotRadius = _ref.dotRadius,
-        dotRadius = _ref$dotRadius === undefined ? 1 : _ref$dotRadius;
+        dotRadius = _ref$dotRadius === undefined ? 3 : _ref$dotRadius;
 
     __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, Polygon);
 
@@ -172,6 +172,8 @@ var Polygon = function () {
     this.finish = false;
     this.startX = '';
     this.startY = '';
+    this.lastX = '';
+    this.lastY = '';
   }
 
   __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass___default()(Polygon, [{
@@ -182,43 +184,61 @@ var Polygon = function () {
 
       this.startX = x;
       this.startY = y;
+      this.lastX = x;
+      this.lastY = y;
       this.ctx.beginPath();
-      this.ctx.fillStyle = this.fillStyle;
-      this.ctx.strokeStyle = this.strokeStyle;
+      this.ctx.fillStyle = this.strokeStyle;
       this.ctx.arc(x, y, this.dotRadius, 0, Math.PI * 2);
       this.ctx.fill();
     }
   }, {
-    key: 'draw',
-    value: function draw(_ref3) {
+    key: 'stroke',
+    value: function stroke(_ref3) {
       var x = _ref3.x,
           y = _ref3.y;
 
+      this.ctx.beginPath();
+      this.ctx.strokeStyle = this.strokeStyle;
+      this.ctx.moveTo(this.lastX, this.lastY);
       this.ctx.lineTo(x, y);
       this.ctx.stroke();
       this.dots.push({ x: x, y: y });
+      this.lastX = x;
+      this.lastY = y;
     }
   }, {
-    key: 'endDraw',
-    value: function endDraw() {
-      this.draw({ x: this.startX, y: this.startY });
-      this.finish = true;
+    key: 'filling',
+    value: function filling() {
+      var _this2 = this;
+
+      this.ctx.fillStyle = this.fillStyle;
+      this.ctx.strokeStyle = 'transparent';
+      this.ctx.beginPath();
+      this.ctx.moveTo(this.startX, this.startY);
+      this.dots.forEach(function (dot, index) {
+        _this2.ctx.lineTo(dot.x, dot.y);
+      });
+      this.ctx.closePath();
       this.ctx.fill();
     }
   }, {
-    key: 'reDraw',
-    value: function reDraw() {
-      this.startDraw({ x: this.dots[0].x, y: this.dots[0].y });
-      for (var i = 1; i < this.dots.length; i++) {
-        this.ctx.lineTo(this.dots[i].x, this.dots[i].y);
-        this.ctx.stroke();
+    key: 'reStroke',
+    value: function reStroke() {
+      var _this3 = this;
+
+      this.dots.pop();
+      this.startDraw({ x: this.startX, y: this.startY });
+      this.ctx.beginPath();
+      this.ctx.strokeStyle = this.strokeStyle;
+      this.ctx.moveTo(this.startX, this.startY);
+      this.dots.forEach(function (dot, index) {
+        _this3.ctx.lineTo(dot.x, dot.y);
+      });
+      this.ctx.stroke();
+      if (this.dots.length > 1) {
+        this.lastX = this.dots[this.dots.length - 1].x;
+        this.lastY = this.dots[this.dots.length - 1].y;
       }
-      if (this.finish) this.endDraw();
-    }
-  }, {
-    key: 'save',
-    value: function save() {
-      this.ctx.save();
     }
   }]);
 
@@ -229,12 +249,10 @@ var Polygon = function () {
   name: 'polygon',
   data: function data() {
     return {
-      activeIndex: '1',
-      activeIndex2: '1',
       canvasContainerW: '',
       canvasContainerH: '',
-      imgBoxW: '',
-      imgBoxH: '',
+      imgBoxW: 0,
+      imgBoxH: 0,
       startX: 0,
       startY: 0,
       x: 0,
@@ -250,8 +268,7 @@ var Polygon = function () {
       editing: false,
       retractCount: 0,
       img: '',
-      imgName: '',
-      imgType: ''
+      imgName: ''
     };
   },
   components: {},
@@ -260,22 +277,26 @@ var Polygon = function () {
   beforeMount: function beforeMount() {},
   mounted: function mounted() {
     var _this = this;
-    this.imgReload(_this.getCanvas);
+    _this.$nextTick(function () {
+      _this.canvasContainerW = ~~window.getComputedStyle(_this.$refs.canvasContainer).width.replace('px', '');
+      _this.canvasContainerH = ~~window.getComputedStyle(_this.$refs.canvasContainer).height.replace('px', '');
+      _this.getCanvas();
+    });
+    _this.$refs.bgImg.onload = function () {
+      _this.imgBoxW = _this.$refs.bgImg.width;
+      _this.imgBoxH = _this.$refs.bgImg.height;
+      if (_this.imgBoxW > _this.canvasContainerW) _this.scale = _this.canvasContainerW / _this.imgBoxW;
+      if (_this.imgBoxH * _this.scale > _this.canvasContainerH) _this.scale = _this.canvasContainerH / _this.imgBoxH;
+      _this.x = (_this.canvasContainerW - _this.imgBoxW) / 2;
+      _this.y = (_this.canvasContainerH - _this.imgBoxH) / 2;
+    };
     document.onkeydown = function (e) {
       console.log(e);
       e.preventDefault();
-      if (e && (e.ctrlKey || e.metaKey) && e.keyCode === 32 && _this.editing && _this.currentPolygon) {
-        _this.finishPolygon();
-      }
-      if (e && (e.ctrlKey || e.metaKey) && e.keyCode === 68) {
-        _this.getCanvasImg();
-      }
-      if (e && (e.ctrlKey || e.metaKey) && e.keyCode === 90 && _this.editing && _this.currentPolygon) {
-        _this.retract();
-      }
-      if (e && e.key === 'Shift' || e.keyCode === 16) {
-        _this.clickEdit();
-      }
+      if (e && (e.ctrlKey || e.metaKey) && (e.keyCode === 32 || e.keyCode === 8)) _this.finishPolygon();
+      if (e && (e.ctrlKey || e.metaKey) && e.keyCode === 68) _this.getCanvasImg();
+      if (e && (e.ctrlKey || e.metaKey) && e.keyCode === 90) _this.retract();
+      if (e && e.key === 'Shift' || e.keyCode === 16) _this.clickEdit();
     };
   },
   beforeUpdate: function beforeUpdate() {},
@@ -284,32 +305,40 @@ var Polygon = function () {
   destroyed: function destroyed() {},
 
   methods: {
-    handleSelect: function handleSelect(key, keyPath) {
-      console.log(key, keyPath);
+    selectImg: function selectImg(e) {
+      this.initCanvas();
+      this.previewImg(e);
     },
-    uploadImg: function uploadImg(e) {
-      var _this2 = this;
+    initCanvas: function initCanvas() {
+      this.ctx && this.clearRect();
+      this.polygons = [];
+      this.currentPolygon = '';
+      this.scale = 1;
+    },
+    previewImg: function previewImg(e) {
+      var _this4 = this;
 
-      this.file = e.target.files[0];
-      this.imgType = this.file.type;
-      this.imgName = this.file.name;
       if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(e.target.value)) {
         this.$alert('请选择以下图片类型：.gif/jpeg/jpg/png/bmp', '提示');
         return false;
       }
+      this.file = e.target.files[0];
+      this.imgName = this.file.name;
       var reader = new FileReader();
       reader.onload = function (e) {
-        _this2.img = e.target.result;
-        _this2.polygons = [];
-        _this2.scale = 1;
+        _this4.img = e.target.result;
       };
       reader.readAsDataURL(this.file);
+    },
+    getCanvas: function getCanvas() {
+      this.canvas = document.getElementById('canvas-layer');
+      this.ctx = this.canvas.getContext('2d');
     },
     clickEdit: function clickEdit() {
       this.editing = !this.editing;
     },
     getCanvasImg: function getCanvasImg() {
-      var type = 'jpeg';
+      var type = 'png';
       var imgdata = this.canvas.toDataURL('image/png');
       var fixtype = function fixtype(type) {
         type = type.toLocaleLowerCase().replace(/jpg/i, 'jpeg');
@@ -325,60 +354,50 @@ var Polygon = function () {
         event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
         saveLink.dispatchEvent(event);
       };
-      var filename = '' + this.imgName.substring(0, this.imgName.lastIndexOf('.')) + '.' + __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_utils_util__["a" /* formatTime */])().format('yyyyMMdd') + '.' + type;
+      var filename = '' + this.imgName.substring(0, this.imgName.lastIndexOf('.')) + '_' + __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_utils_util__["a" /* formatTime */])().format('yyyyMMdd') + '.' + type;
       savaFile(imgdata, filename);
-    },
-    getCanvas: function getCanvas() {
-      var _this3 = this;
-
-      this.$nextTick(function () {
-        _this3.canvas = document.getElementById('canvas-layer');
-        _this3.ctx = _this3.canvas.getContext('2d');
-      });
     },
     createPolygon: function createPolygon(_ref4) {
       var offsetX = _ref4.offsetX,
           offsetY = _ref4.offsetY;
 
       this.currentPolygon = new Polygon({ ctx: this.ctx });
-      this.currentPolygon.save();
       this.currentPolygon.startDraw({ x: offsetX, y: offsetY });
-      this.currentPolygon.draw({ x: offsetX, y: offsetY });
+    },
+    drawPolygon: function drawPolygon(_ref5) {
+      var offsetX = _ref5.offsetX,
+          offsetY = _ref5.offsetY;
+
+      this.currentPolygon.stroke({ x: offsetX, y: offsetY });
     },
     finishPolygon: function finishPolygon() {
-      this.currentPolygon.endDraw();
-      this.polygons.push(this.currentPolygon);
-      this.currentPolygon = '';
+      if (this.editing && this.currentPolygon) {
+        this.clearRect();
+        this.reFill();
+        this.currentPolygon.filling();
+        this.polygons.push(this.currentPolygon);
+        this.currentPolygon = '';
+      }
+    },
+    reFill: function reFill() {
+      this.polygons.forEach(function (polygon, index) {
+        polygon.filling();
+      });
+    },
+    reStroke: function reStroke() {
+      if (this.currentPolygon.dots.length > 0) this.currentPolygon.reStroke();else this.currentPolygon = '';
     },
     retract: function retract() {
-      this.clearRect();
-      for (var i = 0; i < this.polygons.length; i++) {
-        this.polygons[i].reDraw();
+      if (this.editing && this.currentPolygon) {
+        this.clearRect();
+        this.reFill();
+        this.reStroke();
       }
-      this.currentPolygon.dots.pop();
-      if (this.currentPolygon.dots.length > 0) this.currentPolygon.reDraw();else this.currentPolygon = '';
     },
     clearRect: function clearRect() {
       this.ctx.clearRect(0, 0, this.imgBoxW, this.imgBoxH);
     },
-    imgReload: function imgReload(callback) {
-      var _this4 = this;
-
-      var _this = this;
-      this.$refs.bgImg.onload = function () {
-        _this4.x = 0;
-        _this4.y = 0;
-        _this.$nextTick(function () {
-          _this.canvasContainerW = ~~window.getComputedStyle(_this.$refs.canvasContainer).width.replace('px', '');
-          _this.canvasContainerH = ~~window.getComputedStyle(_this.$refs.canvasContainer).height.replace('px', '');
-          _this.imgBoxW = _this.$refs.bgImg.width;
-          _this.imgBoxH = _this.$refs.bgImg.height;
-          callback && callback();
-        });
-      };
-    },
     mousedownTarget: function mousedownTarget(e) {
-      console.log(324324);
       e.preventDefault();
       var offsetX = e.offsetX;
       var offsetY = e.offsetY;
@@ -388,10 +407,8 @@ var Polygon = function () {
         this.startMove(startX, startY);
       } else {
         if (this.currentPolygon) {
-          console.log(1111);
-          this.currentPolygon.draw({ x: offsetX, y: offsetY });
+          this.drawPolygon({ offsetX: offsetX, offsetY: offsetY });
         } else {
-          console.log(222);
           this.createPolygon({ offsetX: offsetX, offsetY: offsetY });
         }
       }
@@ -412,8 +429,8 @@ var Polygon = function () {
       var change = e.deltaY || e.wheelDelta;
       this.changeSize({ change: change });
     },
-    changeSize: function changeSize(_ref5) {
-      var change = _ref5.change;
+    changeSize: function changeSize(_ref6) {
+      var change = _ref6.change;
 
       var coe = 0.2;
       coe = coe / this.imgBoxW > coe / this.imgBoxH ? coe / this.imgBoxH : coe / this.imgBoxW;
@@ -449,7 +466,7 @@ exports = module.exports = __webpack_require__(73)(true);
 
 
 // module
-exports.push([module.i, ".canvas-container[data-v-2297f758]{color:red;position:absolute;left:0;right:0;top:0;bottom:0;height:90%;width:90%;margin:auto;overflow:hidden;background-image:url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC\")}.canvas-actual-layer[data-v-2297f758]{position:relative}.canvas[data-v-2297f758]{position:absolute;top:0;left:0}.cursor-move[data-v-2297f758]{cursor:move}.img-draw[data-v-2297f758]{cursor:crosshair}#ui-layer[data-v-2297f758]{z-index:3}", "", {"version":3,"sources":["/Applications/XAMPP/xamppfiles/htdocs/XaircraftProject/web/AI/src/views/polygon/index.vue"],"names":[],"mappings":"AACA,mCACE,UAAW,AACX,kBAAmB,AACnB,OAAQ,AACR,QAAS,AACT,MAAO,AACP,SAAU,AACV,WAAY,AACZ,UAAW,AACX,YAAa,AACb,gBAAiB,AACjB,8QAAgR,CACjR,AACD,sCACE,iBAAmB,CACpB,AACD,yBACE,kBAAmB,AACnB,MAAO,AACP,MAAQ,CACT,AACD,8BACE,WAAa,CACd,AACD,2BACE,gBAAkB,CACnB,AACD,2BACE,SAAW,CACZ","file":"index.vue","sourcesContent":["\n.canvas-container[data-v-2297f758] {\n  color: red;\n  position: absolute;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 0;\n  height: 90%;\n  width: 90%;\n  margin: auto;\n  overflow: hidden;\n  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC');\n}\n.canvas-actual-layer[data-v-2297f758] {\n  position: relative;\n}\n.canvas[data-v-2297f758] {\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n.cursor-move[data-v-2297f758] {\n  cursor: move;\n}\n.img-draw[data-v-2297f758] {\n  cursor: crosshair;\n}\n#ui-layer[data-v-2297f758] {\n  z-index: 3;\n}\n"],"sourceRoot":""}]);
+exports.push([module.i, ".header[data-v-2297f758]{height:50px;line-height:50px;padding:0 20px}.main-container[data-v-2297f758]{width:100%;height:calc(100% - 50px)}.tools[data-v-2297f758]{padding:0 10px;height:100%}.tool-item[data-v-2297f758]{height:40px}.canvas-c[data-v-2297f758]{height:100%;position:relative}.bg-img-num1[data-v-2297f758]{position:absolute;left:0;right:0;top:0;bottom:0;color:hsla(0,0%,100%,.65);background-color:#24292e;background-image:url(" + __webpack_require__(208) + "),linear-gradient(#191c20,#24292e 15%);background-repeat:repeat-x;background-position:center 0,0 0,0 0}.canvas-container[data-v-2297f758]{position:absolute;left:0;right:0;top:0;bottom:0;margin:auto;overflow:hidden;background-image:url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC\")}.canvas-actual-layer[data-v-2297f758]{position:relative}.canvas[data-v-2297f758]{position:absolute;top:0;left:0}.cursor-move[data-v-2297f758]{cursor:move}.img-draw[data-v-2297f758]{cursor:crosshair}#ui-layer[data-v-2297f758]{z-index:3}", "", {"version":3,"sources":["/Applications/XAMPP/xamppfiles/htdocs/XaircraftProject/web/AI/src/views/polygon/index.vue"],"names":[],"mappings":"AACA,yBACE,YAAa,AACb,iBAAkB,AAClB,cAAgB,CACjB,AACD,iCACE,WAAY,AACZ,wBAA0B,CAC3B,AACD,wBACE,eAAgB,AAChB,WAAa,CACd,AACD,4BACE,WAAa,CACd,AACD,2BACE,YAAa,AACb,iBAAmB,CACpB,AACD,8BACE,kBAAmB,AACnB,OAAQ,AACR,QAAS,AACT,MAAO,AACP,SAAU,AACV,0BAA8B,AAC9B,yBAA0B,AAC1B,oFAA6F,AAC7F,2BAA4B,AAC5B,oCAAwC,CACzC,AACD,mCACE,kBAAmB,AACnB,OAAQ,AACR,QAAS,AACT,MAAO,AACP,SAAU,AACV,YAAa,AACb,gBAAiB,AACjB,8QAAgR,CACjR,AACD,sCACE,iBAAmB,CACpB,AACD,yBACE,kBAAmB,AACnB,MAAO,AACP,MAAQ,CACT,AACD,8BACE,WAAa,CACd,AACD,2BACE,gBAAkB,CACnB,AACD,2BACE,SAAW,CACZ","file":"index.vue","sourcesContent":["\n.header[data-v-2297f758] {\n  height: 50px;\n  line-height: 50px;\n  padding: 0 20px;\n}\n.main-container[data-v-2297f758] {\n  width: 100%;\n  height: calc(100% - 50px);\n}\n.tools[data-v-2297f758] {\n  padding: 0 10px;\n  height: 100%;\n}\n.tool-item[data-v-2297f758] {\n  height: 40px;\n}\n.canvas-c[data-v-2297f758] {\n  height: 100%;\n  position: relative;\n}\n.bg-img-num1[data-v-2297f758] {\n  position: absolute;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 0;\n  color: rgba(255,255,255,0.65);\n  background-color: #24292e;\n  background-image: url(../../assets/images/star-bg.svg),linear-gradient(#191c20, #24292e 15%);\n  background-repeat: repeat-x;\n  background-position: center 0, 0 0, 0 0;\n}\n.canvas-container[data-v-2297f758] {\n  position: absolute;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 0;\n  margin: auto;\n  overflow: hidden;\n  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC');\n}\n.canvas-actual-layer[data-v-2297f758] {\n  position: relative;\n}\n.canvas[data-v-2297f758] {\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n.cursor-move[data-v-2297f758] {\n  cursor: move;\n}\n.img-draw[data-v-2297f758] {\n  cursor: crosshair;\n}\n#ui-layer[data-v-2297f758] {\n  z-index: 3;\n}\n"],"sourceRoot":""}]);
 
 // exports
 
@@ -470,21 +487,38 @@ var update = __webpack_require__(74)("30cd88d0", content, true);
 
 /***/ }),
 
-/***/ 209:
+/***/ 208:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "static/img/star-bg.ba93415.svg";
+
+/***/ }),
+
+/***/ 210:
 /***/ (function(module, exports) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('div', {
-    staticStyle: {
-      "position": "absolute",
-      "z-index": "99"
+  return _c('div', {
+    staticClass: "bg-img-num1"
+  }, [_c('el-row', [_c('div', {
+    staticClass: "header"
+  }, [_vm._v("\n      " + _vm._s(_vm.imgName) + "\n    ")])]), _vm._v(" "), _c('el-row', {
+    staticClass: "main-container"
+  }, [_c('el-col', {
+    staticClass: "tools",
+    attrs: {
+      "span": 2
     }
+  }, [_c('el-row', {
+    staticClass: "tool-item"
+  }, [_vm._v("\n        打点数：" + _vm._s(_vm.currentPolygon && _vm.currentPolygon.dots.length > 0 ? _vm.currentPolygon.dots.length : 0) + "\n      ")]), _vm._v(" "), _c('el-row', {
+    staticClass: "tool-item"
   }, [_c('label', {
-    staticClass: "el-button el-button--primary",
+    staticClass: "el-button el-tooltip item el-button--default",
     attrs: {
       "for": "file_input"
     }
-  }, [_vm._v("\n      选择图片\n      "), _c('input', {
+  }, [_vm._v("\n          选图\n          "), _c('input', {
     staticStyle: {
       "position": "absolute",
       "clip": "rect(0 0 0 0)",
@@ -496,19 +530,72 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "id": "file_input"
     },
     on: {
-      "change": _vm.uploadImg
+      "change": _vm.selectImg
     }
-  })]), _vm._v(" "), _c('el-button', {
+  })])]), _vm._v(" "), _c('el-row', {
+    staticClass: "tool-item"
+  }, [_c('el-tooltip', {
+    staticClass: "item",
     attrs: {
-      "type": "primary"
+      "effect": "dark",
+      "content": "Shift",
+      "placement": "right-start"
     }
-  }, [_vm._v("\n      打点数：" + _vm._s(_vm.currentPolygon && _vm.currentPolygon.dots.length > 0 ? _vm.currentPolygon.dots.length : 0) + "\n    ")]), _vm._v(" "), _c('span', [_vm._v("\n      shift：切换拖拉/绘图；\n      command/ctrl+space: 闭合多边形，填充颜色；\n      command/ctrl+z：返回；\n      command/ctrl+d: 导出图片；\n    ")])], 1), _vm._v(" "), _c('div', {
+  }, [_c('el-button', {
+    on: {
+      "click": _vm.clickEdit
+    }
+  }, [_vm._v("状态")])], 1)], 1), _vm._v(" "), _c('el-row', {
+    staticClass: "tool-item"
+  }, [_c('el-tooltip', {
+    staticClass: "item",
+    attrs: {
+      "effect": "dark",
+      "content": "Ctrl + Space",
+      "placement": "right-start"
+    }
+  }, [_c('el-button', {
+    on: {
+      "click": _vm.finishPolygon
+    }
+  }, [_vm._v("闭合")])], 1)], 1), _vm._v(" "), _c('el-row', {
+    staticClass: "tool-item"
+  }, [_c('el-tooltip', {
+    staticClass: "item",
+    attrs: {
+      "effect": "dark",
+      "content": "Ctrl + Z",
+      "placement": "right-start"
+    }
+  }, [_c('el-button', {
+    on: {
+      "click": _vm.retract
+    }
+  }, [_vm._v("返回")])], 1)], 1), _vm._v(" "), _c('el-row', {
+    staticClass: "tool-item"
+  }, [_c('el-tooltip', {
+    staticClass: "item",
+    attrs: {
+      "effect": "dark",
+      "content": "Ctrl + D",
+      "placement": "right-start"
+    }
+  }, [_c('el-button', {
+    on: {
+      "click": _vm.getCanvasImg
+    }
+  }, [_vm._v("导出")])], 1)], 1)], 1), _vm._v(" "), _c('el-col', {
+    staticClass: "canvas-c",
+    attrs: {
+      "span": 22
+    }
+  }, [_c('div', {
     ref: "canvasContainer",
     staticClass: "canvas-container"
   }, [_c('div', {
     staticClass: "canvas-actual-layer",
     class: {
-      'cursor-move': _vm.moving
+      'cursor-move': !_vm.editing
     },
     style: ({
       'width': _vm.imgBoxW + 'px',
@@ -540,7 +627,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "width": _vm.imgBoxW,
       "height": _vm.imgBoxH
     }
-  })])])])
+  })])])])], 1)], 1)
 },staticRenderFns: []}
 
 /***/ }),
@@ -555,7 +642,7 @@ var Component = __webpack_require__(98)(
   /* script */
   __webpack_require__(156),
   /* template */
-  __webpack_require__(209),
+  __webpack_require__(210),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -929,4 +1016,4 @@ exports.default = function (instance, Constructor) {
 /***/ })
 
 });
-//# sourceMappingURL=1.e1194ebb93b18ecbd4ae.js.map
+//# sourceMappingURL=1.1a1512756e0670c60b48.js.map

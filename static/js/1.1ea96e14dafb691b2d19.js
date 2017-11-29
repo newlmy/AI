@@ -2281,7 +2281,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "bg-img-num1"
   }, [_c('el-row', [_c('div', {
     staticClass: "header"
-  }, [_vm._v("\n        " + _vm._s(_vm.file && _vm.file.name) + "\n      ")])]), _vm._v(" "), _c('el-row', {
+  }, [_vm._v("\n      " + _vm._s(_vm.file && _vm.file.name) + "\n    ")])]), _vm._v(" "), _c('el-row', {
     staticClass: "main-container"
   }, [_c('el-col', {
     staticClass: "tools",
@@ -2310,7 +2310,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "for": "file_input"
     }
-  }, [_vm._v("\n                选图\n                "), _c('input', {
+  }, [_vm._v("\n              选图\n              "), _c('input', {
     staticStyle: {
       "position": "absolute",
       "clip": "rect(0 0 0 0)",
@@ -2394,7 +2394,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "for": "josn_input"
     }
-  }, [_vm._v("\n              导入JSON文件\n              "), _c('input', {
+  }, [_vm._v("\n            导入JSON文件\n            "), _c('input', {
     staticStyle: {
       "position": "absolute",
       "clip": "rect(0 0 0 0)",
@@ -2418,7 +2418,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "lg": 8,
       "xl": 4
     }
-  }, [_vm._v("\n            标记个数：\n          ")]), _vm._v(" "), _c('el-col', {
+  }, [_vm._v("\n          标记个数：\n        ")]), _vm._v(" "), _c('el-col', {
     attrs: {
       "xs": 24,
       "sm": 24,
@@ -2426,7 +2426,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "lg": 6,
       "xl": 20
     }
-  }, [_vm._v("\n            " + _vm._s(_vm.targets.points && _vm.targets.points.length > 0 ? _vm.targets.points.length : 0) + "\n          ")])], 1), _vm._v(" "), _c('el-row', {
+  }, [_vm._v("\n          " + _vm._s(_vm.targets.points && _vm.targets.points.length > 0 ? _vm.targets.points.length : 0) + "\n        ")])], 1), _vm._v(" "), _c('el-row', {
     staticClass: "tool-item"
   }, [_c('div', {
     staticStyle: {
@@ -2434,7 +2434,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "demonstration"
-  }, [_vm._v("设置标记点大小：")])])]), _vm._v(" "), _c('el-row', [_c('div', {
+  }, [_vm._v("设置标记点大小：")]), _vm._v(" "), _c('span', {
+    staticStyle: {
+      "display": "block",
+      "background-color": "#fff",
+      "margin-top": "10px"
+    },
+    style: ({
+      width: _vm.dotRadius + 'px',
+      height: _vm.dotRadius + 'px',
+      borderRadius: _vm.dotRadius + 'px',
+      'transform': 'scale(' + _vm.scale + ',' + _vm.scale + ') '
+    })
+  })])]), _vm._v(" "), _c('el-row', [_c('div', {
     staticClass: "block"
   }, [_c('el-slider', {
     attrs: {
@@ -2507,4 +2519,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 /***/ })
 ]));
-//# sourceMappingURL=1.c0aa0f78bc313fc66a9a.js.map
+//# sourceMappingURL=1.1ea96e14dafb691b2d19.js.map

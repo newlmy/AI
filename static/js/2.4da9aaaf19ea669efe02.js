@@ -1205,17 +1205,11 @@ var DrawBard = function () {
     this.moveX = moveX;
     this.moveY = moveY;
     this.scale = 1;
-    this.canScale = false;
     this.editing = false;
     this.moving = false;
   }
 
   __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass___default()(DrawBard, [{
-    key: 'startScale',
-    value: function startScale() {
-      this.canScale = true;
-    }
-  }, {
     key: 'changeSize',
     value: function changeSize(_ref2) {
       var change = _ref2.change;
@@ -1224,11 +1218,6 @@ var DrawBard = function () {
       coe = coe / this.imgBoxW > coe / this.imgBoxH ? coe / this.imgBoxH : coe / this.imgBoxW;
       var num = coe * change;
       num < 0 ? this.scale += Math.abs(num) : this.scale > Math.abs(num) ? this.scale -= Math.abs(num) : this.scale;
-    }
-  }, {
-    key: 'endScale',
-    value: function endScale() {
-      this.canScale = false;
     }
   }, {
     key: 'startMove',
@@ -1240,11 +1229,11 @@ var DrawBard = function () {
   }, {
     key: 'move',
     value: function move(nowX, nowY, vue) {
-      var _this = this;
+      var _this2 = this;
 
       this.moving && vue.$nextTick(function () {
-        _this.x = ~~(nowX - _this.moveX);
-        _this.y = ~~(nowY - _this.moveY);
+        _this2.x = ~~(nowX - _this2.moveX);
+        _this2.y = ~~(nowY - _this2.moveY);
       });
     }
   }, {
@@ -1255,18 +1244,23 @@ var DrawBard = function () {
   }, {
     key: 'imgReload',
     value: function imgReload(_ref3) {
-      var _this2 = this;
+      var _this3 = this;
 
       var vue = _ref3.vue;
 
       vue.$refs.targetImg.onload = function () {
-        _this2.w = ~~window.getComputedStyle(vue.$refs.canvas).width.replace('px', '');
-        _this2.h = ~~window.getComputedStyle(vue.$refs.canvas).height.replace('px', '');
-        _this2.imgBoxW = vue.$refs.targetImg.width;
-        _this2.imgBoxH = vue.$refs.targetImg.height;
-        _this2.maxDrawWidth = _this2.imgBoxW;
-        _this2.maxDrawHeight = _this2.imgBoxH;
-        _this2.rotate = 0;
+        _this3.w = ~~window.getComputedStyle(vue.$refs.canvas).width.replace('px', '');
+        _this3.h = ~~window.getComputedStyle(vue.$refs.canvas).height.replace('px', '');
+        _this3.imgBoxW = vue.$refs.targetImg.width;
+        _this3.imgBoxH = vue.$refs.targetImg.height;
+        _this3.maxDrawWidth = _this3.imgBoxW;
+        _this3.maxDrawHeight = _this3.imgBoxH;
+        _this3.rotate = 0;
+        if (_this3.imgBoxW > _this3.w) _this3.scale = _this3.w / _this3.imgBoxW;
+        if (_this3.imgBoxH * _this3.scale > _this3.h) _this3.scale = _this3.h / _this3.imgBoxH;
+        console.log(_this3.scale);
+        _this3.x = (_this3.w - _this3.imgBoxW) / 2;
+        _this3.y = (_this3.h - _this3.imgBoxH) / 2;
       };
     }
   }]);
@@ -1351,7 +1345,7 @@ var DrawSquareness = function () {
   }, {
     key: 'draw',
     value: function draw(_ref6) {
-      var _this3 = this;
+      var _this4 = this;
 
       var nowClientX = _ref6.nowClientX,
           nowClientY = _ref6.nowClientY,
@@ -1359,41 +1353,41 @@ var DrawSquareness = function () {
           drawBard = _ref6.drawBard;
 
       this.drawing && vue.$nextTick(function () {
-        var fw = ~~(nowClientX - _this3.startClientX);
-        var fh = ~~(nowClientY - _this3.startClientY);
-        if (_this3.ableChangeX) {
-          if (_this3.dragPositionX === 'right') {
+        var fw = ~~(nowClientX - _this4.startClientX);
+        var fh = ~~(nowClientY - _this4.startClientY);
+        if (_this4.ableChangeX) {
+          if (_this4.dragPositionX === 'right') {
             if (fw > 0) {
-              _this3.w = _this3.oldW + fw > drawBard.maxDrawWidth - _this3.defaultOffsetX ? drawBard.maxDrawWidth - _this3.defaultOffsetX : _this3.oldW + fw;
+              _this4.w = _this4.oldW + fw > drawBard.maxDrawWidth - _this4.defaultOffsetX ? drawBard.maxDrawWidth - _this4.defaultOffsetX : _this4.oldW + fw;
             } else {
-              _this3.w = Math.abs(fw) < _this3.oldW ? _this3.oldW - Math.abs(fw) : Math.abs(fw) - _this3.oldW > _this3.defaultOffsetX ? _this3.defaultOffsetX : Math.abs(fw) - _this3.oldW;
-              _this3.startOffsetX = Math.abs(fw) < _this3.oldW ? _this3.defaultOffsetX : Math.abs(fw) - _this3.oldW > _this3.defaultOffsetX ? 0 : _this3.defaultOffsetX - Math.abs(fw) + _this3.oldW;
+              _this4.w = Math.abs(fw) < _this4.oldW ? _this4.oldW - Math.abs(fw) : Math.abs(fw) - _this4.oldW > _this4.defaultOffsetX ? _this4.defaultOffsetX : Math.abs(fw) - _this4.oldW;
+              _this4.startOffsetX = Math.abs(fw) < _this4.oldW ? _this4.defaultOffsetX : Math.abs(fw) - _this4.oldW > _this4.defaultOffsetX ? 0 : _this4.defaultOffsetX - Math.abs(fw) + _this4.oldW;
             }
-          } else if (_this3.dragPositionX === 'left') {
+          } else if (_this4.dragPositionX === 'left') {
             if (fw > 0) {
-              _this3.w = _this3.oldW - fw > 0 ? _this3.oldW - fw : fw - _this3.oldW > drawBard.maxDrawWidth - _this3.defaultOffsetX - _this3.oldW ? drawBard.maxDrawWidth - _this3.defaultOffsetX - _this3.oldW : fw - _this3.oldW;
-              _this3.startOffsetX = _this3.oldW - fw > 0 ? _this3.defaultOffsetX + fw : _this3.defaultOffsetX + _this3.oldW;
+              _this4.w = _this4.oldW - fw > 0 ? _this4.oldW - fw : fw - _this4.oldW > drawBard.maxDrawWidth - _this4.defaultOffsetX - _this4.oldW ? drawBard.maxDrawWidth - _this4.defaultOffsetX - _this4.oldW : fw - _this4.oldW;
+              _this4.startOffsetX = _this4.oldW - fw > 0 ? _this4.defaultOffsetX + fw : _this4.defaultOffsetX + _this4.oldW;
             } else {
-              _this3.w = Math.abs(fw) > _this3.defaultOffsetX ? _this3.oldW + _this3.defaultOffsetX : _this3.oldW + Math.abs(fw);
-              _this3.startOffsetX = Math.abs(fw) > _this3.defaultOffsetX ? 0 : _this3.defaultOffsetX - Math.abs(fw);
+              _this4.w = Math.abs(fw) > _this4.defaultOffsetX ? _this4.oldW + _this4.defaultOffsetX : _this4.oldW + Math.abs(fw);
+              _this4.startOffsetX = Math.abs(fw) > _this4.defaultOffsetX ? 0 : _this4.defaultOffsetX - Math.abs(fw);
             }
           }
         }
-        if (_this3.ableChangeY) {
-          if (_this3.dragPositionY === 'top') {
+        if (_this4.ableChangeY) {
+          if (_this4.dragPositionY === 'top') {
             if (fh > 0) {
-              _this3.h = _this3.oldH - fh > 0 ? _this3.oldH - fh : fh - _this3.oldH > drawBard.maxDrawHeight - _this3.oldH - _this3.defaultOffsetY ? drawBard.maxDrawHeight - _this3.defaultOffsetY - _this3.oldH : fh - _this3.oldH;
-              _this3.startOffsetY = _this3.oldH - fh > 0 ? _this3.defaultOffsetY + fh : _this3.defaultOffsetY + _this3.oldH;
+              _this4.h = _this4.oldH - fh > 0 ? _this4.oldH - fh : fh - _this4.oldH > drawBard.maxDrawHeight - _this4.oldH - _this4.defaultOffsetY ? drawBard.maxDrawHeight - _this4.defaultOffsetY - _this4.oldH : fh - _this4.oldH;
+              _this4.startOffsetY = _this4.oldH - fh > 0 ? _this4.defaultOffsetY + fh : _this4.defaultOffsetY + _this4.oldH;
             } else {
-              _this3.h = Math.abs(fh) > _this3.defaultOffsetY ? _this3.oldH + _this3.defaultOffsetY : _this3.oldH + Math.abs(fh);
-              _this3.startOffsetY = Math.abs(fh) > _this3.defaultOffsetY ? 0 : _this3.defaultOffsetY - Math.abs(fh);
+              _this4.h = Math.abs(fh) > _this4.defaultOffsetY ? _this4.oldH + _this4.defaultOffsetY : _this4.oldH + Math.abs(fh);
+              _this4.startOffsetY = Math.abs(fh) > _this4.defaultOffsetY ? 0 : _this4.defaultOffsetY - Math.abs(fh);
             }
-          } else if (_this3.dragPositionY === 'bottom') {
+          } else if (_this4.dragPositionY === 'bottom') {
             if (fh > 0) {
-              _this3.h = _this3.oldH + fh > drawBard.maxDrawHeight - _this3.defaultOffsetY ? drawBard.maxDrawHeight - _this3.defaultOffsetY : _this3.oldH + fh;
+              _this4.h = _this4.oldH + fh > drawBard.maxDrawHeight - _this4.defaultOffsetY ? drawBard.maxDrawHeight - _this4.defaultOffsetY : _this4.oldH + fh;
             } else {
-              _this3.h = Math.abs(fh) < _this3.oldH ? _this3.oldH - Math.abs(fh) : Math.abs(fh) - _this3.oldH > _this3.defaultOffsetY ? _this3.defaultOffsetY : Math.abs(fh) - _this3.oldH;
-              _this3.startOffsetY = Math.abs(fh) < _this3.oldH ? _this3.defaultOffsetY : Math.abs(fh) - _this3.oldH > _this3.defaultOffsetY ? 0 : _this3.defaultOffsetY - Math.abs(fh) + _this3.oldH;
+              _this4.h = Math.abs(fh) < _this4.oldH ? _this4.oldH - Math.abs(fh) : Math.abs(fh) - _this4.oldH > _this4.defaultOffsetY ? _this4.defaultOffsetY : Math.abs(fh) - _this4.oldH;
+              _this4.startOffsetY = Math.abs(fh) < _this4.oldH ? _this4.defaultOffsetY : Math.abs(fh) - _this4.oldH > _this4.defaultOffsetY ? 0 : _this4.defaultOffsetY - Math.abs(fh) + _this4.oldH;
             }
           }
         }
@@ -1419,7 +1413,7 @@ var DrawSquareness = function () {
   }, {
     key: 'move',
     value: function move(_ref8) {
-      var _this4 = this;
+      var _this5 = this;
 
       var nowClientX = _ref8.nowClientX,
           nowClientY = _ref8.nowClientY,
@@ -1427,17 +1421,17 @@ var DrawSquareness = function () {
           drawBard = _ref8.drawBard;
 
       this.isMove && vue.$nextTick(function () {
-        var moveW = ~~(nowClientX - _this4.startClientX);
-        var moveH = ~~(nowClientY - _this4.startClientY);
+        var moveW = ~~(nowClientX - _this5.startClientX);
+        var moveH = ~~(nowClientY - _this5.startClientY);
         if (moveW > 0) {
-          _this4.startOffsetX = moveW > drawBard.imgBoxW - _this4.w - _this4.defaultOffsetX ? drawBard.imgBoxW - _this4.w : _this4.defaultOffsetX + moveW;
+          _this5.startOffsetX = moveW > drawBard.imgBoxW - _this5.w - _this5.defaultOffsetX ? drawBard.imgBoxW - _this5.w : _this5.defaultOffsetX + moveW;
         } else {
-          _this4.startOffsetX = Math.abs(moveW) < _this4.defaultOffsetX ? _this4.defaultOffsetX + moveW : 0;
+          _this5.startOffsetX = Math.abs(moveW) < _this5.defaultOffsetX ? _this5.defaultOffsetX + moveW : 0;
         }
         if (moveH > 0) {
-          _this4.startOffsetY = moveH > drawBard.imgBoxH - _this4.h - _this4.defaultOffsetY ? drawBard.imgBoxH - _this4.h : _this4.defaultOffsetY + moveH;
+          _this5.startOffsetY = moveH > drawBard.imgBoxH - _this5.h - _this5.defaultOffsetY ? drawBard.imgBoxH - _this5.h : _this5.defaultOffsetY + moveH;
         } else {
-          _this4.startOffsetY = Math.abs(moveH) < _this4.defaultOffsetY ? _this4.defaultOffsetY + moveH : 0;
+          _this5.startOffsetY = Math.abs(moveH) < _this5.defaultOffsetY ? _this5.defaultOffsetY + moveH : 0;
         }
       });
     }
@@ -1459,6 +1453,7 @@ var DrawSquareness = function () {
       count: '',
       editing: false,
       img: '',
+      file: '',
       squareness: [],
       support: '',
       drawBard: {},
@@ -1648,6 +1643,7 @@ var DrawSquareness = function () {
       this.drawBard.maxDrawHeight = 0;
       this.drawBard.moveX = 0;
       this.drawBard.moveY = 0;
+      this.drawBard.scale = 1;
       this.drawBard.editing = false;
       this.drawBard.moving = false;
       this.currentSquare = {};
@@ -1655,8 +1651,14 @@ var DrawSquareness = function () {
     }
   },
   mounted: function mounted() {
+    var _this = this;
     this.drawBard = new DrawBard({});
     this.drawBard.imgReload({ vue: this });
+    document.onkeydown = function (e) {
+      e.preventDefault();
+      if (e && (e.ctrlKey || e.metaKey) && e.keyCode === 68) _this.send();
+      if (e && e.key === 'Shift' || e.keyCode === 16) _this.clickEdit();
+    };
   },
   destroyed: function destroyed() {
     this.editing = false;
@@ -1668,7 +1670,7 @@ var DrawSquareness = function () {
 /***/ 192:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(152)(true);
+exports = module.exports = __webpack_require__(153)(true);
 // imports
 
 
@@ -1690,7 +1692,7 @@ var content = __webpack_require__(192);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(153)("ab543186", content, true);
+var update = __webpack_require__(154)("ab543186", content, true);
 
 /***/ }),
 
@@ -1767,7 +1769,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }),
     on: {
       "mousedown": _vm.mousedownTarget,
-      "mouseout": _vm.mouseoutTarget
+      "mouseout": _vm.mouseoutTarget,
+      "mousewheel": _vm.scaleImg
     }
   }, [_c('img', {
     ref: "targetImg",
@@ -1790,7 +1793,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       style: ({
         'width': item.w + 'px',
         'height': item.h + 'px',
-        'transform': 'translate3d(' + item.startOffsetX / _vm.drawBard.scale + 'px,' + item.startOffsetY / _vm.drawBard.scale + 'px,' + '0)'
+        'transform': 'translate3d(' + item.startOffsetX + 'px,' + item.startOffsetY + 'px,' + '0)'
       })
     }, [(item.w > 0) ? _c('span', {
       staticClass: "square-info"
@@ -2014,4 +2017,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 /***/ })
 
 });
-//# sourceMappingURL=2.659bc851327024404d02.js.map
+//# sourceMappingURL=2.4da9aaaf19ea669efe02.js.map

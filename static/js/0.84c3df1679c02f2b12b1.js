@@ -282,10 +282,10 @@ module.exports = { "default": __webpack_require__(170), __esModule: true };
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return fileTransformJSON; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_typeof__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_typeof___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_typeof__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_promise__ = __webpack_require__(163);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_promise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_promise__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_json_stringify__ = __webpack_require__(166);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_json_stringify___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_json_stringify__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_json_stringify__ = __webpack_require__(166);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_json_stringify___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_json_stringify__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_promise__ = __webpack_require__(163);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_promise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_promise__);
 
 
 
@@ -335,15 +335,19 @@ function canvasTransformDataURL(_ref2) {
       _ref2$imgType = _ref2.imgType,
       imgType = _ref2$imgType === undefined ? 'png' : _ref2$imgType;
 
-  var type = fixType(imgType);
-  var dataURL = canvas.toDataURL(type);
-  return dataURL;
+  var promise = new __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_promise___default.a(function (resolve, reject) {
+    canvas.toBlob(function (blob) {
+      var d = URL.createObjectURL(blob);
+      resolve(d);
+    });
+  });
+  return promise;
 }
 function dataTransformJSONDataURL(data) {
-  return URL.createObjectURL(new Blob([__WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_json_stringify___default()(data)]));
+  return URL.createObjectURL(new Blob([__WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_json_stringify___default()(data)]));
 }
 function fileTransformJSON(file) {
-  var promise = new __WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_promise___default.a(function (resolve, reject) {
+  var promise = new __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_promise___default.a(function (resolve, reject) {
     var oFReader = new FileReader();
     oFReader.onload = function (result) {
       resolve(result);
@@ -1255,7 +1259,6 @@ var Polygon = function () {
       _this.y = (_this.canvasContainerH - _this.imgBoxH) / 2;
     };
     document.onkeydown = function (e) {
-      console.log(e);
       e.preventDefault();
       if (e && (e.ctrlKey || e.metaKey) && (e.keyCode === 32 || e.keyCode === 8)) _this.finishPolygon();
       if (e && (e.ctrlKey || e.metaKey) && e.keyCode === 68) _this.getCanvasImg({});
@@ -1298,9 +1301,11 @@ var Polygon = function () {
       var _ref4$type = _ref4.type,
           type = _ref4$type === undefined ? 'png' : _ref4$type;
 
-      var dataURL = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_utils_file__["j" /* canvasTransformDataURL */])({ canvas: this.canvas, imgType: type });
-      var filename = '' + this.file.name + '_' + __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_utils_util__["a" /* formatTime */])().format('yyyyMMdd') + '.' + type;
-      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_utils_file__["f" /* autoDownload */])({ dataURL: dataURL, filename: filename });
+      var _this = this;
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_utils_file__["j" /* canvasTransformDataURL */])({ canvas: this.canvas, imgType: type }).then(function (dataURL) {
+        var filename = '' + _this.file.name + '_' + __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_utils_util__["a" /* formatTime */])().format('yyyyMMdd') + '.' + type;
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_utils_file__["f" /* autoDownload */])({ dataURL: dataURL, filename: filename });
+      });
     },
     createPolygon: function createPolygon(_ref5) {
       var offsetX = _ref5.offsetX,
@@ -1598,4 +1603,4 @@ module.exports = Component.exports
 /***/ })
 
 });
-//# sourceMappingURL=0.bb3f226fa3a82cb86987.js.map
+//# sourceMappingURL=0.84c3df1679c02f2b12b1.js.map

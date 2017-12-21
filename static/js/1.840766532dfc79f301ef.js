@@ -307,10 +307,10 @@ module.exports = { "default": __webpack_require__(170), __esModule: true };
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return fileTransformJSON; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_typeof__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_typeof___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_typeof__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_promise__ = __webpack_require__(163);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_promise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_promise__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_json_stringify__ = __webpack_require__(166);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_json_stringify___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_json_stringify__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_json_stringify__ = __webpack_require__(166);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_json_stringify___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_json_stringify__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_promise__ = __webpack_require__(163);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_promise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_promise__);
 
 
 
@@ -360,15 +360,19 @@ function canvasTransformDataURL(_ref2) {
       _ref2$imgType = _ref2.imgType,
       imgType = _ref2$imgType === undefined ? 'png' : _ref2$imgType;
 
-  var type = fixType(imgType);
-  var dataURL = canvas.toDataURL(type);
-  return dataURL;
+  var promise = new __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_promise___default.a(function (resolve, reject) {
+    canvas.toBlob(function (blob) {
+      var d = URL.createObjectURL(blob);
+      resolve(d);
+    });
+  });
+  return promise;
 }
 function dataTransformJSONDataURL(data) {
-  return URL.createObjectURL(new Blob([__WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_json_stringify___default()(data)]));
+  return URL.createObjectURL(new Blob([__WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_json_stringify___default()(data)]));
 }
 function fileTransformJSON(file) {
-  var promise = new __WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_promise___default.a(function (resolve, reject) {
+  var promise = new __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_promise___default.a(function (resolve, reject) {
     var oFReader = new FileReader();
     oFReader.onload = function (result) {
       resolve(result);
@@ -1722,4 +1726,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 /***/ })
 
 });
-//# sourceMappingURL=1.1cb815d5d7d3fa2d512f.js.map
+//# sourceMappingURL=1.840766532dfc79f301ef.js.map

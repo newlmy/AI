@@ -1220,15 +1220,7 @@ var Circle = function () {
         _ref9$width = _ref9.width,
         width = _ref9$width === undefined ? '2px' : _ref9$width,
         _ref9$active = _ref9.active,
-        active = _ref9$active === undefined ? false : _ref9$active,
-        _ref9$dragPositionX = _ref9.dragPositionX,
-        dragPositionX = _ref9$dragPositionX === undefined ? 'right' : _ref9$dragPositionX,
-        _ref9$dragPositionY = _ref9.dragPositionY,
-        dragPositionY = _ref9$dragPositionY === undefined ? 'bottom' : _ref9$dragPositionY,
-        _ref9$ableChangeX = _ref9.ableChangeX,
-        ableChangeX = _ref9$ableChangeX === undefined ? true : _ref9$ableChangeX,
-        _ref9$ableChangeY = _ref9.ableChangeY,
-        ableChangeY = _ref9$ableChangeY === undefined ? true : _ref9$ableChangeY;
+        active = _ref9$active === undefined ? false : _ref9$active;
 
     __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, Circle);
 
@@ -1239,13 +1231,6 @@ var Circle = function () {
     this.color = color;
     this.width = width;
     this.active = active;
-    this.dragPositionX = dragPositionX;
-    this.dragPositionY = dragPositionY;
-    this.ableChangeX = ableChangeX;
-    this.ableChangeY = ableChangeY;
-    console.log(this.radius);
-    console.log(this.x);
-    console.log(this.y);
     this.init({ svg: svg, radius: radius, x: x, y: y, color: color, width: width });
   }
 
@@ -1406,6 +1391,10 @@ var Circle = function () {
       __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_utils_file__["f" /* autoDownload */])({ dataURL: dataURL, filename: filename });
     },
     startPaint: function startPaint(e) {
+      if (this.currentCircle) {
+        this.stopPaint();
+        return;
+      }
       e.preventDefault();
       this.polygonMouse.startOffsetX = e.offsetX;
       this.polygonMouse.startOffsetY = e.offsetY;
@@ -1424,9 +1413,13 @@ var Circle = function () {
       this.polygonMouse.startClientX = nowX;
     },
     stopPaint: function stopPaint(e) {
-      if (this.currentCircle.radius > 0) this.circles.push(this.currentCircle);
-      this.currentCircle.setActive({ active: false });
-      this.currentCircle = null;
+      if (this.currentCircle) {
+        if (this.currentCircle.radius > 0) this.circles.push(this.currentCircle);
+        this.currentCircle.setActive({ active: false });
+        this.currentCircle = null;
+      } else {
+        return false;
+      }
     },
     mousedownTarget: function mousedownTarget(e) {
       e.preventDefault();
@@ -7144,7 +7137,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       'width': _vm.canvas.w + 'px',
       'height': _vm.canvas.h + 'px',
       'transform': 'scale(' + _vm.canvas.scale + ',' + _vm.canvas.scale + ') ' + 'translate3d(' + _vm.canvas.x / _vm.canvas.scale + 'px,' + _vm.canvas.y / _vm.canvas.scale + 'px,' + '0)'
-    })
+    }),
+    on: {
+      "mousedown": _vm.startPaint,
+      "mousemove": _vm.painting,
+      "mouseup": _vm.stopPaint
+    }
   }, [_c('div', {
     staticClass: "paint-box-img"
   }, [_c('img', {
@@ -7169,11 +7167,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }),
     attrs: {
       "id": "svg"
-    },
-    on: {
-      "mousedown": _vm.startPaint,
-      "mousemove": _vm.painting,
-      "mouseup": _vm.stopPaint
     }
   })]), _vm._v(" "), _c('div', {
     staticClass: "paint-box-move-layer",
@@ -7217,4 +7210,4 @@ module.exports = Component.exports
 /***/ })
 
 });
-//# sourceMappingURL=0.9dc83879fb2a51e19aaa.js.map
+//# sourceMappingURL=0.63b0807a2554f2102a76.js.map

@@ -1211,10 +1211,10 @@ var Canvas = function () {
 var Circle = function () {
   function Circle(_ref9) {
     var svg = _ref9.svg,
-        x = _ref9.x,
-        y = _ref9.y,
+        centerX = _ref9.centerX,
+        centerY = _ref9.centerY,
         _ref9$radius = _ref9.radius,
-        radius = _ref9$radius === undefined ? 2 : _ref9$radius,
+        radius = _ref9$radius === undefined ? 0 : _ref9$radius,
         _ref9$color = _ref9.color,
         color = _ref9$color === undefined ? '#f06' : _ref9$color,
         _ref9$width = _ref9.width,
@@ -1225,40 +1225,32 @@ var Circle = function () {
     __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, Circle);
 
     this.svg = svg;
+    this.centerX = centerX;
+    this.centerY = centerY;
     this.radius = radius;
-    this.x = x;
-    this.y = y;
+    this.x = centerX - radius;
+    this.y = centerY - radius;
+    this.diameter = radius * 2;
     this.color = color;
     this.width = width;
     this.active = active;
-    this.init({ svg: svg, radius: radius, x: x, y: y, color: color, width: width });
+    this.circle = svg.circle(this.diameter).fill('none').stroke({ color: color, width: width }).move(this.x, this.y);
   }
 
   __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass___default()(Circle, [{
-    key: 'init',
-    value: function init(_ref10) {
-      var svg = _ref10.svg,
-          radius = _ref10.radius,
-          x = _ref10.x,
-          y = _ref10.y,
-          color = _ref10.color,
-          width = _ref10.width;
-
-      this.circle = svg.circle(radius).fill('none').stroke({ color: color, width: width }).move(x, y);
-    }
-  }, {
     key: 'setActive',
-    value: function setActive(_ref11) {
-      var active = _ref11.active;
+    value: function setActive(_ref10) {
+      var active = _ref10.active;
 
       this.active = active;
     }
   }, {
     key: 'setRadius',
-    value: function setRadius(_ref12) {
-      var radius = _ref12.radius;
+    value: function setRadius(_ref11) {
+      var radius = _ref11.radius;
 
       this.radius = radius;
+      this.diameter = radius * 2;
       this.circle.radius(radius);
     }
   }, {
@@ -1358,6 +1350,7 @@ var Circle = function () {
       this.canvas.setImg({ img: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_utils_file__["c" /* fileTransformDataURL */])(this.file.file) });
     },
     selectImg: function selectImg(e) {
+      if (e.target.files.length <= 0) return false;
       this.initCanvas();
       this.previewImg(e);
     },
@@ -1380,7 +1373,7 @@ var Circle = function () {
     getJSON: function getJSON() {
       var datas = [];
       this.circles.forEach(function (circle, index) {
-        datas.push({ x: circle.x, y: circle.y, radius: circle.radius });
+        datas.push({ x: circle.centerX, y: circle.centerY, radius: circle.radius });
       });
       if (datas.length < 0 || !this.file) {
         this.$alert('暂无标注数据，请先标注', '提示');
@@ -1389,6 +1382,25 @@ var Circle = function () {
       var dataURL = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_utils_file__["i" /* dataTransformJSONDataURL */])(datas);
       var filename = '' + this.file.name + '_' + __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_utils_util__["a" /* formatTime */])().format('yyyyMMdd') + '.json';
       __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_utils_file__["f" /* autoDownload */])({ dataURL: dataURL, filename: filename });
+    },
+    selectJSON: function selectJSON(e) {
+      var _this2 = this;
+
+      var file = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_utils_file__["a" /* getFile */])({ e: e });
+      if (!file || !__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_utils_file__["g" /* isJSON */])(file.ext)) {
+        this.$alert('请选择以下JSON文件：.json', '提示');
+        return false;
+      }
+      var promise = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_utils_file__["h" /* fileTransformJSON */])(file.file);
+      promise.then(function (result) {
+        var data = JSON.parse(result.target.result);
+        if (data.length <= 0) return false;
+        _this2.allClear();
+        data.forEach(function (circle, index) {
+          var c = new Circle({ svg: _this2.draw, centerX: circle.x, centerY: circle.y, radius: circle.radius });
+          _this2.circles.push(c);
+        });
+      });
     },
     startPaint: function startPaint(e) {
       if (this.currentCircle) {
@@ -1400,17 +1412,28 @@ var Circle = function () {
       this.polygonMouse.startOffsetY = e.offsetY;
       this.polygonMouse.startClientX = e.clientX;
       this.polygonMouse.startClientY = e.clientY;
-      this.currentCircle = new Circle({ svg: this.draw, x: this.polygonMouse.startOffsetX, y: this.polygonMouse.startOffsetY });
+      this.polygonMouse.defaultClientX = e.clientX;
+      this.polygonMouse.defaultClientY = e.clientY;
+      this.currentCircle = new Circle({ svg: this.draw, centerX: this.polygonMouse.startOffsetX, centerY: this.polygonMouse.startOffsetY });
       this.currentCircle.setActive({ active: true });
     },
     painting: function painting(e) {
       if (this.currentCircle == null || !this.currentCircle.active) return false;
       e.preventDefault();
-      var nowX = e.clientX;
-      var fw = ~~(nowX - this.polygonMouse.startClientX);
-      this.currentCircle.setRadius({ radius: this.currentCircle.radius + fw > 0 ? this.currentCircle.radius + fw : 0 });
+      var nowClientX = e.clientX;
+      var fw = ~~(nowClientX - this.polygonMouse.startClientX);
+      var distance = nowClientX - this.polygonMouse.defaultClientX;
+      if (distance > 5) {
+        this.currentCircle.setRadius({ radius: this.currentCircle.radius + fw });
+      } else if (distance >= -5 && distance <= 0) {
+        this.currentCircle.setRadius({ radius: 0 });
+      } else if (distance <= 5 && distance > 0) {
+        this.currentCircle.setRadius({ radius: 0 });
+      } else {
+        this.currentCircle.setRadius({ radius: this.currentCircle.radius - fw });
+      }
+      this.polygonMouse.startClientX = nowClientX;
       this.currentCircle.circle.on('click', function () {});
-      this.polygonMouse.startClientX = nowX;
     },
     stopPaint: function stopPaint(e) {
       if (this.currentCircle) {
@@ -7044,7 +7067,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "bg-img-num1"
   }, [_c('el-row', [_c('div', {
     staticClass: "header"
-  }, [_vm._v("\n        " + _vm._s(_vm.file && _vm.file.name) + "\n      ")])]), _vm._v(" "), _c('el-row', {
+  }, [_vm._v("\n      " + _vm._s(_vm.file && _vm.file.name) + "\n    ")])]), _vm._v(" "), _c('el-row', {
     staticClass: "main-container"
   }, [_c('el-col', {
     staticClass: "tools",
@@ -7058,7 +7081,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "for": "file_input"
     }
-  }, [_vm._v("\n            选图\n            "), _c('input', {
+  }, [_vm._v("\n          选图\n          "), _c('input', {
     staticStyle: {
       "position": "absolute",
       "clip": "rect(0 0 0 0)",
@@ -7112,6 +7135,27 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_vm._v("清除")])], 1)], 1), _vm._v(" "), _c('el-row', {
     staticClass: "tool-item"
+  }, [_c('label', {
+    staticClass: "el-button el-tooltip item el-button--default",
+    attrs: {
+      "for": "json_input"
+    }
+  }, [_vm._v("\n          导入\n          "), _c('input', {
+    staticStyle: {
+      "position": "absolute",
+      "clip": "rect(0 0 0 0)",
+      "left": "-1000px",
+      "top": "0"
+    },
+    attrs: {
+      "type": "file",
+      "id": "json_input"
+    },
+    on: {
+      "change": _vm.selectJSON
+    }
+  })])]), _vm._v(" "), _c('el-row', {
+    staticClass: "tool-item"
   }, [_c('el-tooltip', {
     staticClass: "item",
     attrs: {
@@ -7130,7 +7174,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('div', {
     ref: "paintToolMain",
-    staticClass: "paint-tool-main"
+    staticClass: "paint-tool-main",
+    on: {
+      "mousemove": _vm.painting,
+      "mouseup": _vm.stopPaint
+    }
   }, [_c('div', {
     staticClass: "paint-box",
     style: ({
@@ -7210,4 +7258,4 @@ module.exports = Component.exports
 /***/ })
 
 });
-//# sourceMappingURL=0.63b0807a2554f2102a76.js.map
+//# sourceMappingURL=0.05b3abed46101d0ad504.js.map

@@ -1174,6 +1174,7 @@ var Polygon = function () {
       this.startY = y;
       this.lastX = x;
       this.lastY = y;
+      this.dots.push({ x: x, y: y });
       this.ctx.beginPath();
       this.ctx.fillStyle = this.strokeStyle;
       this.ctx.lineWidth = 1;
@@ -1207,6 +1208,7 @@ var Polygon = function () {
       this.ctx.beginPath();
       this.ctx.moveTo(this.startX, this.startY);
       this.dots.forEach(function (dot, index) {
+        if (index === 0) return false;
         _this2.ctx.lineTo(dot.x, dot.y);
       });
       this.ctx.closePath();
@@ -1218,12 +1220,19 @@ var Polygon = function () {
       var _this3 = this;
 
       this.dots.pop();
-      this.startDraw({ x: this.startX, y: this.startY });
+      this.lastX = this.startX;
+      this.lastY = this.startY;
+      this.ctx.beginPath();
+      this.ctx.fillStyle = this.strokeStyle;
+      this.ctx.lineWidth = 1;
+      this.ctx.arc(this.startX, this.startY, this.dotRadius, 0, Math.PI * 2);
+      this.ctx.fill();
       this.ctx.beginPath();
       this.ctx.strokeStyle = this.strokeStyle;
       this.ctx.lineWidth = this.lineWidth;
       this.ctx.moveTo(this.startX, this.startY);
       this.dots.forEach(function (dot, index) {
+        if (index === 0) return false;
         _this3.ctx.lineTo(dot.x, dot.y);
       });
       this.ctx.stroke();
@@ -1330,6 +1339,15 @@ var Polygon = function () {
         var filename = '' + _this.file.name + '_' + __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_utils_util__["a" /* formatTime */])().format('yyyyMMdd') + '.' + type;
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_utils_file__["f" /* autoDownload */])({ dataURL: dataURL, filename: filename });
       });
+    },
+    getJSON: function getJSON() {
+      var data = [];
+      this.polygons.forEach(function (polygon, index) {
+        data.push(polygon.dots);
+      });
+      var dataURL = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_utils_file__["i" /* dataTransformJSONDataURL */])(data);
+      var filename = '' + this.file.name + '.json';
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_utils_file__["f" /* autoDownload */])({ dataURL: dataURL, filename: filename });
     },
     createPolygon: function createPolygon(_ref5) {
       var offsetX = _ref5.offsetX,
@@ -1550,9 +1568,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('el-button', {
     on: {
-      "click": function($event) {
-        _vm.getCanvasImg({})
-      }
+      "click": _vm.getJSON
     }
   }, [_vm._v("导出")])], 1)], 1)], 1), _vm._v(" "), _c('el-col', {
     staticClass: "canvas-c",
@@ -1603,4 +1619,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 /***/ })
 
 });
-//# sourceMappingURL=2.794e8dd2bac77c90a1a1.js.map
+//# sourceMappingURL=2.b5aeaf5f1339739ec768.js.map

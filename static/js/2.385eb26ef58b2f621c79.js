@@ -1294,7 +1294,7 @@ var Polygon = function () {
     document.onkeydown = function (e) {
       e.preventDefault();
       if (e && (e.ctrlKey || e.metaKey) && (e.keyCode === 32 || e.keyCode === 8)) _this.finishPolygon();
-      if (e && (e.ctrlKey || e.metaKey) && e.keyCode === 68) _this.getCanvasImg({});
+      if (e && (e.ctrlKey || e.metaKey) && e.keyCode === 68) _this.getJSON();
       if (e && (e.ctrlKey || e.metaKey) && e.keyCode === 90) _this.retract();
       if (e && e.key === 'Shift' || e.keyCode === 16) _this.clickEdit();
     };
@@ -1619,4 +1619,4 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 /***/ })
 
 });
-//# sourceMappingURL=2.b5aeaf5f1339739ec768.js.map
+//# sourceMappingURL=2.385eb26ef58b2f621c79.js.map
